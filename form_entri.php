@@ -1,26 +1,27 @@
+<?php require_once "config/database.php";?>
 <div class="d-flex flex-column flex-lg-row mt-5 mb-4">
     <!-- judul halaman -->
     <div class="flex-grow-1 d-flex align-items-center">
         <i class="fa-regular fa-user icon-title"></i>
-        <h3>Siswa</h3>
+        <h3>Entri User</h3>
     </div>
     <!-- breadcrumbs -->
     <div class="ms-5 ms-lg-0 pt-lg-2">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="https://pustakakoding.com/" class="text-dark text-decoration-none"><i class="fa-solid fa-house"></i></a></li>
-                <li class="breadcrumb-item"><a href="?halaman=data" class="text-dark text-decoration-none">Siswa</a></li>
-                <li class="breadcrumb-item" aria-current="page">Entri</li>
+                <li class="breadcrumb-item"><a href="?halaman=data" class="text-dark text-decoration-none">Detail</a></li>
+                <li class="breadcrumb-item" aria-current="page">Entri User</li>
             </ol>
         </nav>
     </div>
 </div>
-
 <div class="bg-white rounded-4 shadow-sm p-4 mb-5">
     <!-- judul form -->
     <div class="alert alert-primary rounded-4 mb-5" role="alert">
-        <i class="fa-solid fa-pen-to-square me-2"></i> Entri Data Siswa
+        <i class="fa-solid fa-pen-to-square me-2"></i> Entri User Permohonan 
     </div>
+
     <!-- form entri data -->
     <form action="proses_simpan.php" method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
         <div class="row">
@@ -30,27 +31,10 @@
                         <?php
                         // membuat "id_siswa"
                         // sql statement untuk menampilkan 5 digit terakhir dari "id_siswa" pada tabel "tbl_siswa"
-                        $query = $mysqli->query("SELECT RIGHT(id_siswa,5) as nomor FROM tbl_siswa ORDER BY id_siswa DESC LIMIT 1")
+                        $query = $mysqli->query("SELECT * FROM permohonan_user ORDER BY id_permohonan DESC LIMIT 1")
                                                  or die('Ada kesalahan pada query tampil data : ' . $mysqli->error);
                         // ambil jumlah baris data hasil query
                         $rows = $query->num_rows;
-
-                        // cek hasil query
-                        // jika "id_siswa" sudah ada
-                        if ($rows <> 0) {
-                            // ambil data hasil query
-                            $data = $query->fetch_assoc();
-                            // nomor urut "id_siswa" yang terakhir + 1
-                            $nomor_urut = $data['nomor'] + 1;
-                        }
-                        // jika "id_siswa" belum ada
-                        else {
-                            // nomor urut "id_siswa" = 1
-                            $nomor_urut = 1;
-                        }
-
-                        // menambahkan karakter "ID-" diawal dan karakter "0" disebelah kiri nomor urut
-                        $id_siswa = "ID-" . str_pad($nomor_urut, 5, "0", STR_PAD_LEFT);
                         ?>
                         <label class="form-label">ID Siswa <span class="text-danger">*</span></label>
                         <!-- tampilkan "id_siswa" -->
