@@ -28,6 +28,39 @@ body {
     text-decoration: none;
 }
 
+/* Apply the custom scrollbar styles to the entire HTML and body */
+html, body {
+    scrollbar-width: thin; /* Firefox */
+    scrollbar-color: #888 #f1f1f1; /* Firefox */
+}
+
+/* Style for WebKit-based browsers like Chrome */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 10px;
+    border: 3px solid #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+/* Force the scrollbar to appear for testing purposes */
+body {
+    height: 200vh; /* Temporarily make the body longer to force a scrollbar */
+    overflow-y: scroll;
+}
+
+
 .btn-primary {
     --bs-btn-color: #fff;
     --bs-btn-bg: #435ebe;
@@ -59,6 +92,12 @@ tr {
     border-style: solid;
     border-width: 0;
 }
+/* Pastikan dropdown tampil ke bawah */
+.form-select {
+    position: relative;
+    z-index: 1000; /* Pastikan dropdown di atas elemen lain */
+}
+
 
 .form-search input {
     border-color: #ced4da;
@@ -89,6 +128,7 @@ tr {
     background-position: right calc(1em + 0.3rem) center;
     background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
 }
+
 
 .flatpickr-day {
     border-radius: 15px;

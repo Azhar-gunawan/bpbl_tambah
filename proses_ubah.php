@@ -1,29 +1,87 @@
+<head>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
 <?php
-// panggil file "database.php" untuk koneksi ke database
 require_once "config/database.php";
 
-// mengecek data hasil submit dari form
-if (isset($_POST['simpan'])) {
-    // ambil data hasil submit dari form
-    $id_permohonan      = $mysqli->real_escape_string($_POST['id_permohonan']);
-    $judul_permohonan       = $mysqli->real_escape_string($_POST['judul_permohonan']);
-    $usulanby         = $mysqli->real_escape_string($_POST['usulanby']);
-    $unit_pemohon  = $mysqli->real_escape_string($_POST['unit_pemohon']);
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Capture and sanitize form inputs
+    $id = isset($_POST['id']) ? trim($_POST['id']) : '';
+    $userid = isset($_POST['userid']) ? trim($_POST['userid']) : '';
+    $nama_lengkap = isset($_POST['nama_lengkap']) ? trim($_POST['nama_lengkap']) : '';
+    $role_user = isset($_POST['role_user']) ? trim($_POST['role_user']) : '';
+    $kd_lit = isset($_POST['kd_lit']) ? trim($_POST['kd_lit']) : null;
+    $kd_instalatir = isset($_POST['kd_instalatir']) ? trim($_POST['kd_instalatir']) : null;
+    $kd_upi = isset($_POST['kd_upi']) ? trim($_POST['kd_upi']) : null;
+    $kd_area = isset($_POST['kd_area']) ? trim($_POST['kd_area']) : null;
+    $kd_ulp = isset($_POST['kd_ulp']) ? trim($_POST['kd_ulp']) : null;
 
-    // mengecek data foto dari form ubah data
-    // jika data foto tidak ada (foto tidak diubah)
-    if (empty($nama_file)) {
-        // sql statement untuk update data di tabel "tbl_siswa" berdasarkan "id_siswa"
-        $update = $mysqli->query("UPDATE permohonan_user
-                                  SET judul_permohonan='$judul_permohonan', usulanby='$usulanby', unit_pemohon='$unit_pemohon'
-                                  WHERE id_permohonan='$id_permohonan'")
-                                  or die('Ada kesalahan pada query update : ' . $mysqli->error);
-        // cek query
-        // jika proses update berhasil
-        if ($update) {
-            // alihkan ke halaman data siswa dan tampilkan pesan berhasil ubah data
-            header('location: index.php?halaman=data&pesan=2');
+    // Validate required fields
+    if ($id && $nama_lengkap && $role_user) {
+        $sqlUpdate = "UPDATE app_userid 
+                      SET 
+                          USERID = ?, 
+                          FULLNAME = ?, 
+                          ROLE_CODE = ?, 
+                          KD_LIT = ?, 
+                          KD_INSTALATIR = ?, 
+                          KD_UPI = ?, 
+                          KD_AREA = ?, 
+                          KD_ULP = ? 
+                      WHERE 
+                          ID = ?";
+
+        if ($stmt = $mysqli->prepare($sqlUpdate)) {
+            // Bind parameters to the statement
+            $stmt->bind_param('sssssssss', $userid, $nama_lengkap, $role_user, $kd_lit, $kd_instalatir, $kd_upi, $kd_area, $kd_ulp, $id);
+            
+            // Execute the query
+            if ($stmt->execute()) {
+                // Success message
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                title: 'Success!',
+                                text: 'Data user berhasil diubah!',
+                                icon: 'success',
+                                confirmButtonText: 'OK'
+                            }).then(function() {
+                                window.location = 'index.php'; // Redirect to another page
+                            });
+                        });
+                      </script>";
+            } else {
+                // Error message
+                echo "<script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            Swal.fire({
+                                title: 'Error!',
+                                text: 'Gagal mengubah data user: " . $stmt->error . "',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                      </script>";
+            }
+            
+            // Close the statement
+            $stmt->close();
+        } else {
+            echo "<script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        Swal.fire({
+                            title: 'Error!',
+                            text: 'Gagal menyiapkan statement: " . $mysqli->error . "',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    });
+                  </script>";
         }
     }
 
+    // Close the database connection
+    $mysqli->close();
 }
+?>
