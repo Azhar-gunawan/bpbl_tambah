@@ -19,7 +19,7 @@ $resultUpi = $mysqli->query($queryUpi);
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
-                    <a href="https://pustakakoding.com/" class="text-dark text-decoration-none">
+                    <a href="#" class="text-dark text-decoration-none">
                         <i class="fa-solid fa-house"></i>
                     </a>
                 </li>
@@ -40,12 +40,24 @@ $resultUpi = $mysqli->query($queryUpi);
 
     <!-- form entri data -->
     <form action="proses_simpan.php" method="POST" class="needs-validation" novalidate>
+                <script>
+            function validateForm() {
+                var isValid = true;
+                // Check if required fields are filled
+                // Example:
+                if (document.querySelector('select[name="kd_lit"]').value === '') {
+                    isValid = false;
+                    // Show error or alert
+                }
+                return isValid;
+            }
+            </script>
         <div class="row">
             <!-- User ID -->
             <div class="col-xl-6">
                 <div class="mb-3 pe-xl-3">
                     <label class="form-label">User ID<span class="text-danger">*</span></label>
-                    <input type="text" name="userid" class="form-control" autocomplete="off" >
+                    <input type="text" name="userid" class="form-control" autocomplete="off" required>
                     <div class="invalid-feedback">User ID Tidak Boleh Kosong.</div>
                 </div>
             </div>
@@ -54,7 +66,7 @@ $resultUpi = $mysqli->query($queryUpi);
             <div class="col-xl-6">
                 <div class="mb-3 ps-xl-3">
                     <label class="form-label">Nama Lengkap<span class="text-danger">*</span></label>
-                    <input type="text" name="fullname" class="form-control" autocomplete="off" >
+                    <input type="text" name="fullname" class="form-control" autocomplete="off" required>
                     <div class="invalid-feedback">Nama Lengkap Tidak Boleh Kosong.</div>
                 </div>
             </div>
@@ -67,7 +79,7 @@ $resultUpi = $mysqli->query($queryUpi);
             <div class="col-xl-6">
                 <div class="mb-3 pe-xl-3">
                     <label class="form-label">Role User<span class="text-danger">*</span></label>
-                    <select name="role_code" class="form-control" autocomplete="off" >
+                    <select name="role_code" class="form-control" autocomplete="off" required>
                         <option selected disabled value="">Pilih Role Code</option>
                         <option value="UPI">PLN UPI</option>
                         <option value="PLN">PLN PUSAT</option>

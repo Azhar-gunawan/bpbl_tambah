@@ -1,3 +1,18 @@
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
+<!-- Bootstrap Table CSS -->
+<link rel="stylesheet" href="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.css">
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap Table JS -->
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/bootstrap-table.min.js"></script>
+<!-- TableExport and Bootstrap Table Export extensions -->
+<script src="https://unpkg.com/tableexport.jquery.plugin/tableExport.min.js"></script>
+<script src="https://unpkg.com/bootstrap-table@1.18.3/dist/extensions/export/bootstrap-table-export.min.js"></script>
+
 <?php
 require_once "config/database.php";
 
@@ -34,6 +49,8 @@ if ($result === false) {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+
+
 <div class="d-flex flex-column flex-lg-row mt-5 mb-4">
     <!-- Judul halaman -->
     <div class="flex-grow-1 d-flex align-items-center">
@@ -43,7 +60,7 @@ if ($result === false) {
     <div class="ms-5 ms-lg-0 pt-lg-2">
         <nav style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="https://pustakakoding.com/" class="text-dark text-decoration-none"><i class="fa-solid fa-house"></i></a></li>
+                <li class="breadcrumb-item"><a href="#" class="text-dark text-decoration-none"><i class="fa-solid fa-house"></i></a></li>
                 <li class="breadcrumb-item"><a href="?halaman=data" class="text-dark text-decoration-none">Permohonan</a></li>
                 <li class="breadcrumb-item active" aria-current="page">User</li>
             </ol>
@@ -109,63 +126,83 @@ $(document).ready(function() {
 });
 </script>
 
+<script>
+$(document).ready(function() {
+    $('#exportToExcel').on('click', function() {
+        window.location.href = 'export_excel.php';
+    });
+});
+</script>
 
-<div class="row flex-lg-row-reverse align-items-center mb-5">
-    <!-- Button untuk kembali dan masuk ke halaman entri -->
-    <div class="col-lg-4 col-xl-4">
-    <button type="button" class="btn btn-danger btn-sm rounded-pill py-2 px-4 mb-4 mb-lg-0" data-bs-toggle="modal" data-bs-target="#modalHapusUser" data-userid="' . htmlspecialchars($data['ID']) . '">Hapus Semua User</button>
-        <a href="?halaman=entri" class="btn btn-primary rounded-pill float-lg-end py-2 px-4 mb-4 mb-lg-0">+ Entri User</a>
+
+
+<div class="row align-items-center mb-5">
+    <!-- Button for exporting to Excel, deleting all users, and entering a new user -->
+    <div class="col-lg-4 col-xl-4 mb-3 mb-lg-0 text-lg-start text-center">
+        <button id="exportToExcel" class="btn btn-success btn-sm rounded-pill py-2 px-4 mb-2">
+            Export to Excel
+        </button>
+        <button type="button" class="btn btn-danger btn-sm rounded-pill py-2 px-4 mb-2" data-bs-toggle="modal" data-bs-target="#modalHapusUser" data-userid="' . htmlspecialchars($data['ID']) . '">
+            Hapus Semua User
+        </button>
+    </div>
+    <div class="col-lg-8 col-xl-8 text-lg-end text-center">
+        <a href="?halaman=entri" class="btn btn-primary rounded-pill py-2 px-4">
+            + Entri User
+        </a>
     </div>
 </div>
 
 
 
-<div class="row mb-5">
-    <div class="table-responsive">
-        <table class="table table-hover">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">User ID</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">Fullname</th>
-                    <th scope="col">kd_lit</th>
-                    <th scope="col">kd_instalatir</th>
-                    <th scope="col">kd_upi</th>
-                    <th scope="col">kd_area</th>
-                    <th scope="col">kd_ulp</th>
-                    <th scope="col">Actions</th>
-                </tr>
-                </thead>
-<tbody>
-    <?php
-    if ($result && $result->num_rows > 0) {
-        $no = 0; // Initialize the counter variable
-        while ($data = $result->fetch_assoc()) {
-            echo '<tr>';
-            echo '<th scope="row">' . ++$no . '</th>'; // Increment the counter before displaying it
-            echo '<td>' . htmlspecialchars($data['USERID']) . '</td>';
-            echo '<td>' . htmlspecialchars($data['ROLE_CODE']) . '</td>';
-            echo '<td>' . htmlspecialchars($data['FULLNAME']) . '</td>';
-            echo '<td>' . htmlspecialchars($data['KD_LIT']) . '</td>';
-            echo '<td>' . htmlspecialchars($data['KD_INSTALATIR']) . '</td>';
-            echo '<td>' . htmlspecialchars($data['KD_UPI']) . '</td>';
-            echo '<td>' . htmlspecialchars($data['KD_AREA']) . '</td>';
-            echo '<td>' . htmlspecialchars($data['KD_ULP']) . '</td>';
-            echo '<td>';
-            echo '<a href="?halaman=ubah&id=' . urlencode($data['ID']) . '" class="btn btn-success btn-sm rounded-pill px-3 me-2 mb-2 mb-lg-0"> Ubah </a>';
-            echo '<button type="button" class="btn btn-danger btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalHapus" data-userid="' . htmlspecialchars($data['ID']) . '">Hapus</button>';
-            echo '</td>';
-            echo '</tr>';
-        }
-    } else {
-        echo '<tr><td colspan="10" class="text-center">Tidak ada data yang tersedia.</td></tr>';
-    }
-    ?>
-</tbody>
-</table>
+
+<div class="table-responsive">
+    <table id="" class="table table-hover table-striped table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">User ID</th>
+                <th scope="col">Role</th>
+                <th scope="col">Fullname</th>
+                <th scope="col">kd_lit</th>
+                <th scope="col">kd_instalatir</th>
+                <th scope="col">kd_upi</th>
+                <th scope="col">kd_area</th>
+                <th scope="col">kd_ulp</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+            if ($result && $result->num_rows > 0) {
+                $no = 0;
+                while ($data = $result->fetch_assoc()) {
+                    echo '<tr>';
+                    echo '<th scope="row">' . ++$no . '</th>';
+                    echo '<td>' . htmlspecialchars($data['USERID']) . '</td>';
+                    echo '<td>' . htmlspecialchars($data['ROLE_CODE']) . '</td>';
+                    echo '<td>' . htmlspecialchars($data['FULLNAME']) . '</td>';
+                    echo '<td>' . htmlspecialchars($data['KD_LIT']) . '</td>';
+                    echo '<td>' . htmlspecialchars($data['KD_INSTALATIR']) . '</td>';
+                    echo '<td>' . htmlspecialchars($data['KD_UPI']) . '</td>';
+                    echo '<td>' . htmlspecialchars($data['KD_AREA']) . '</td>';
+                    echo '<td>' . htmlspecialchars($data['KD_ULP']) . '</td>';
+                    echo '<td>';
+                    echo '<a href="?halaman=ubah&id=' . urlencode($data['ID']) . '" class="btn btn-success btn-sm rounded-pill px-3 me-2 mb-2 mb-lg-0"> Ubah </a>';
+                    echo '<button type="button" class="btn btn-danger btn-sm rounded-pill px-3" data-bs-toggle="modal" data-bs-target="#modalHapus" data-userid="' . htmlspecialchars($data['ID']) . '">Hapus</button>';
+                    echo '</td>';
+                    echo '</tr>';
+                }
+            } else {
+                echo '<tr><td colspan="10" class="text-center">Tidak ada data yang tersedia.</td></tr>';
+            }
+            ?>
+        </tbody>
+    </table>
 </div>
-</div>
+
+
+
 
 <!-- Your existing table code -->
 
@@ -316,3 +353,4 @@ $(document).ready(function() {
     });
 });
 </script>
+
